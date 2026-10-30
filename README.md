@@ -83,15 +83,9 @@ CHIPLER-Battery-Emulator/
 │   │   ├── src/                        # Core source tree (auto, batt, hal, ui, gfx, settings)
 │   │   ├── bench/                      # Diagnostic pulse and translator benchmark suites
 │   │   └── tests/                      # 35 host unit test suites (100% CTest pass)
-│   └── releases/                       # Pre-compiled UF2 binaries ready to flash
+│   └── releases/                       # Pre-compiled UF2 firmware ready to flash
 │       ├── CHIPLER_AUTO_LEARN_P1_RC1_fd0c96b.uf2      # Latest Auto-Learn build (iPhone 12P & 13P)
-│       ├── CHIPLER_beta_1_063_OWNER_PHONE_r7.uf2     # Milestone r7 baseline (25k+ verified reads)
-│       └── SHA256SUMS.txt                             # Cryptographic SHA256 checksums
-└── tools/
-    ├── chipler_monitor.py              # Real-time SMBus protocol & telemetry PC monitor
-    ├── START_MONITOR.bat               # One-click Windows monitor launcher
-    ├── requirements.txt                # Python dependencies (pyserial)
-    └── protocol_knowledge_seed.json    # Initial battery register seed definition
+│       └── SHA256SUMS.txt                             # Cryptographic SHA256 checksum
 ```
 
 ---
@@ -138,10 +132,6 @@ CHIPLER-Battery-Emulator/
    - Connect the power supply through the INA226 shunt to the phone battery flex (B+ and GND).
    - Connect the 1.8V level-shifted SDA and SCL lines to the phone battery flex.
    - Press the iPhone power button. The emulator will automatically detect the bus transactions, transition to `RUNNING` mode, and display the battery percentage on the iPhone screen.
-
-4. **Live PC Monitoring (Optional):**
-   - Open the [`tools/`](tools/) folder and double-click [`START_MONITOR.bat`](tools/START_MONITOR.bat).
-   - The script will automatically detect the COM port and stream live SMBus packet traffic, CRC-8 checks, and telemetry to your terminal.
 
 ---
 
