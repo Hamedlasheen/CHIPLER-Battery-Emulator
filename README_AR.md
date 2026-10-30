@@ -1,13 +1,13 @@
 # CHIPLER Battery Emulator — محاكي بطاريات الآيفون الذكي
 
-[![Status](https://img.shields.io/badge/Hardware_Status-Verified_on_iPhone_12P_%26_13P-brightgreen.svg)]()
+[![Status](https://img.shields.io/badge/Hardware_Status-Hardware_Verified_Universal-brightgreen.svg)]()
 [![Target](https://img.shields.io/badge/MCU-RP2350_Dual_ARM_Cortex--M33-blue.svg)]()
 [![Bus](https://img.shields.io/badge/Protocol-SMBus_1.8V_Level--Shifted-orange.svg)]()
 [![Tests](https://img.shields.io/badge/Host_Tests-35%2F35_PASS_(100%25)-success.svg)]()
 [![License](https://img.shields.io/badge/License-MIT-lightgrey.svg)](LICENSE)
 
-> **أول محاكي عتادي مفتوح المصدر لبطاريات الآيفون الذكية يعمل بمحرك التعلم الذاتي (Auto-Learn Engine) ومحول مستويات 1.8V آمن تماماً، مبني على معالج RP2350 ثنائي النواة.**  
-> تم اختباره وإثبات إقلاع هواتف **iPhone 12 Pro** و **iPhone 13 Pro** بنجاح تام بدون بطارية أصلية مع التحكم الفوري في نسبة الشحن من 1% إلى 100% وظهورها مباشرة على شاشة الهاتف.
+> **أول محاكي عتادي مفتوح المصدر لبطاريات الهواتف الذكية يعمل بمحرك التعلم الذاتي (Auto-Learn Engine) ومحول مستويات 1.8V آمن تماماً، مبني على معالج RP2350 ثنائي النواة.**  
+> تم اختباره وإثبات إقلاع الهواتف الذكية بنجاح تام بدون بطارية أصلية مع التحكم الفوري في نسبة الشحن من 1% إلى 100% وظهورها مباشرة على شاشة الهاتف.
 
 ---
 
@@ -87,7 +87,7 @@ CHIPLER-Battery-Emulator/
 │   │   ├── bench/                      # كود فحص المترجمات والمولدات
 │   │   └── tests/                      # 35 جناح اختبار حاسوبي لوحدات النظام
 │   └── releases/                       # ملف الفيرموير الجاهز للشحن فوراً (UF2)
-│       ├── CHIPLER_AUTO_LEARN_P1_RC1_fd0c96b.uf2      # الإصدار الأحدث ذاتي التعلم (iPhone 12P & 13P)
+│       ├── CHIPLER_AUTO_LEARN_P1_RC1_fd0c96b.uf2      # الإصدار الأحدث ذاتي التعلم (Multi-Model Support)
 │       └── SHA256SUMS.txt                             # بصمات التحقق المشفرة للملفات
 ```
 
@@ -145,7 +145,7 @@ CHIPLER-Battery-Emulator/
 - **35/35 جناح اختبار حاسوبي (CTest)** بنجاح تام في 1.19 ثانية.
 - **225 فحصاً لمحرك التعلم AUTO LEARN** والتحقق من حفظ البروفايل بالفلاش بنظام Fail-Closed.
 - **7,886 فحصاً لمسارات واجهة المستخدم** والتأكد من إلغاء تعقيدات الاختيار اليدوي لموديل الهاتف.
-- **إثبات عملي ميداني:** إقلاع هاتف **iPhone 12 Pro** وهاتف **iPhone 13 Pro** بنجاح واستقرار تامين، وتعديل النسبة لـ 100% وظهورها على الهاتف دون أي كراش أو أخطاء ناقل.
+- **إثبات عملي ميداني:** إقلاع مختلف موديلات الهواتف الذكية المستهدفة بنجاح واستقرار تامين، وتعديل النسبة لـ 100% وظهورها على شاشة الجهاز دون أي كراش أو أخطاء ناقل.
 
 ---
 

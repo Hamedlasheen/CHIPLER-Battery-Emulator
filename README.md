@@ -1,6 +1,6 @@
-# CHIPLER Battery Emulator — Smart iPhone Battery Emulator
+# CHIPLER Battery Emulator — Universal Smart Smartphone Battery Emulator
 
-[![Status](https://img.shields.io/badge/Hardware_Status-Verified_on_iPhone_12P_%26_13P-brightgreen.svg)]()
+[![Status](https://img.shields.io/badge/Hardware_Status-Hardware_Verified_Universal-brightgreen.svg)]()
 [![Target](https://img.shields.io/badge/MCU-RP2350_Dual_ARM_Cortex--M33-blue.svg)]()
 [![Bus](https://img.shields.io/badge/Protocol-SMBus_1.8V_Level--Shifted-orange.svg)]()
 [![Tests](https://img.shields.io/badge/Host_Tests-35%2F35_PASS_(100%25)-success.svg)]()
@@ -8,8 +8,8 @@
 
 *Read this in other languages:* [العربية 🇸🇦](README_AR.md)
 
-> **The first open-source hardware emulator for Apple Smart Batteries powered by an autonomous Auto-Learn Engine and safe 1.8V bidirectional level shifting, built on the dual-core RP2350 MCU.**  
-> Successfully benchmarked and proven on physical hardware: boots **iPhone 12 Pro** and **iPhone 13 Pro** without an OEM battery, with real-time battery percentage control (1% – 100%) reflected immediately on iOS.
+> **The first open-source hardware emulator for Smartphone Smart Batteries powered by an autonomous Auto-Learn Engine and safe 1.8V bidirectional level shifting, built on the dual-core RP2350 MCU.**  
+> Successfully benchmarked and proven on physical hardware: boots **modern smartphones** without an OEM battery, with real-time battery percentage control (1% – 100%) reflected immediately on the operating system.
 
 ---
 
@@ -91,7 +91,7 @@ CHIPLER-Battery-Emulator/
 │   │   ├── bench/                      # Diagnostic pulse and translator benchmark suites
 │   │   └── tests/                      # 35 host unit test suites (100% CTest pass)
 │   └── releases/                       # Pre-compiled UF2 firmware ready to flash
-│       ├── CHIPLER_AUTO_LEARN_P1_RC1_fd0c96b.uf2      # Latest Auto-Learn build (iPhone 12P & 13P)
+│       ├── CHIPLER_AUTO_LEARN_P1_RC1_fd0c96b.uf2      # Latest Auto-Learn build (Multi-Model Support)
 │       └── SHA256SUMS.txt                             # Cryptographic SHA256 checksum
 ```
 
@@ -148,7 +148,7 @@ The codebase has undergone rigorous engineering testing and passed with **100% c
 - **35/35 Host Unit Test Suites (CTest):** 100% PASS in 1.19 seconds.
 - **225 Auto-Learn Assertions:** Full verification of the handshake engine, fail-closed flash persistence, and profile matching.
 - **7,886 UI Test Cycles:** Complete regression test verifying automatic mode transitions without manual picker intervention.
-- **Physical Hardware Verification:** Live boot verified on **iPhone 12 Pro** and **iPhone 13 Pro**, with real-time SOC adjustment (50% to 100%) confirmed on the device display.
+- **Physical Hardware Verification:** Live boot verified on multiple target smartphone models, with real-time SOC adjustment (50% to 100%) confirmed on the device display.
 
 ---
 
