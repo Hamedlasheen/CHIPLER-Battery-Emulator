@@ -55,8 +55,8 @@
 A comprehensive, beginner-friendly assembly manual has been prepared with full photographic evidence:
 * 📥 **[Download English Assembly Guide: docs/CHIPLER_Assembly_Guide_EN.pdf](docs/CHIPLER_Assembly_Guide_EN.pdf)**
 * 📥 **[Download Arabic Assembly Guide: docs/CHIPLER_Assembly_AR.pdf](docs/CHIPLER_Assembly_AR.pdf)**
-  - **Authentic workbench photographs** of every physical component.
-  - **Verified Bill of Materials (BOM)** with all obsolete parts eliminated.
+  - **Official product photographs** of every physical component.
+  - **Complete Bill of Materials (BOM)** with verified component ratings.
   - **Detailed SOT-223 and SOT-23 pinout diagrams**.
   - **Wire-by-wire color-coded breadboard interconnection table**.
   - Safe phone battery flex termination guide (B+, GND, SDA, SCL).
