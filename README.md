@@ -1,4 +1,4 @@
-# CHIPLER Battery Emulator — محاكي بطاريات الآيفون الذكي
+# CHIPLER Battery Emulator — Smart iPhone Battery Emulator
 
 [![Status](https://img.shields.io/badge/Hardware_Status-Verified_on_iPhone_12P_%26_13P-brightgreen.svg)]()
 [![Target](https://img.shields.io/badge/MCU-RP2350_Dual_ARM_Cortex--M33-blue.svg)]()
@@ -6,160 +6,164 @@
 [![Tests](https://img.shields.io/badge/Host_Tests-35%2F35_PASS_(100%25)-success.svg)]()
 [![License](https://img.shields.io/badge/License-MIT-lightgrey.svg)](LICENSE)
 
-> **أول محاكي عتادي مفتوح المصدر لبطاريات الآيفون الذكية يعمل بمحرك التعلم الذاتي (Auto-Learn Engine) ومحول مستويات 1.8V آمن تماماً، مبني على معالج RP2350 ثنائي النواة.**  
-> تم اختباره وإثبات إقلاع هواتف **iPhone 12 Pro** و **iPhone 13 Pro** بنجاح تام بدون بطارية أصلية مع التحكم الفوري في نسبة الشحن من 1% إلى 100% وظهورها مباشرة على شاشة الهاتف.
+*Read this in other languages:* [العربية 🇸🇦](README_AR.md)
+
+> **The first open-source hardware emulator for Apple Smart Batteries powered by an autonomous Auto-Learn Engine and safe 1.8V bidirectional level shifting, built on the dual-core RP2350 MCU.**  
+> Successfully benchmarked and proven on physical hardware: boots **iPhone 12 Pro** and **iPhone 13 Pro** without an OEM battery, with real-time battery percentage control (1% – 100%) reflected immediately on iOS.
 
 ---
 
-## 👨‍💻 نبذة عن المطور والجهة المطورة (About the Developer)
+## 👨‍💻 About the Developer & Platform
 
-* **المطور الرئيسي:** **م. حامد لاشين (Eng. Hamed Lasheen)**
-* **المؤسسة والمنصة:** **تشيبلر (CHIPLER)**
-* 🌐 **الموقع الرسمي:** [https://chipler.net/](https://chipler.net/)
-* 📱 **الصفحة الرسمية على فيسبوك:** [https://www.facebook.com/Chipler.eg](https://www.facebook.com/Chipler.eg)
+* **Lead Developer:** **Eng. Hamed Lasheen**
+* **Organization & Brand:** **CHIPLER**
+* 🌐 **Official Website:** [https://chipler.net/](https://chipler.net/)
+* 📱 **Official Facebook Page:** [https://www.facebook.com/Chipler.eg](https://www.facebook.com/Chipler.eg)
 
-### 📌 نبذة تعريفية من منصة تشيبلر (About Chipler):
-> **منصة تشيبلر (Chipler.net):** منصة ومؤسسة متخصصة في هندسة الإلكترونيات الدقيقة، وابتكار وتطوير أدوات وبرمجيات فحص وصيانة الهواتف الذكية والأجهزة المحمولة. نهدف إلى تقديم حلول هندسية ومحاكيات عتادية متقدمة (Hardware Emulators) تُمكن مهندسي وفنيي الصيانة حول العالم من فحص اللوحات الأم، وتشخيص الدوائر المعقدة، ومحاكاة الطرفيات والبطاريات بأعلى معايير الأمان والدقة العلمية.
-
----
-
-## 🌟 مميزات المشروع التقنية (Core Features)
-
-1. **محاكاة كاملة لبروتوكول بطاريات أبل (Smart Battery SMBus 1.8V):**
-   - استجابة حية لكافة أوامر مسجلات Veridian القياسية (0x0B) بما فيها أوامر طلبات الجهد، والتيار، وحرارة البطارية، والسعة التصميمية، والشهادات المشفرة.
-   - حساب تلقائي وفوري لبايت فحص الخطأ (PEC / CRC-8) بسرعة الميكروثانية.
-
-2. **محرك التعرف والتعلم الذاتي (AUTO LEARN Engine):**
-   - لا حاجة لاختيار موديل الهاتف يدوياً من القوائم؛ يستمع المحاكي للناقل تلقائياً فور تشغيل الهاتف في وضع الاستماع الصامت (`LISTEN`).
-   - يتعرف المحاكي على بصمة تسلسل الطلبات الصادرة من دائرة إدارة الطاقة بالهاتف (PMU)، ويطابق القالب المناسب (`COMPATIBLE`)، ثم يتحول تلقائياً إلى وضع التشغيل الفعلي (`RUNNING`) دون أي تدخل بشري.
-
-3. **التحكم اللحظي في نسبة الشحن (Dynamic SOC Control):**
-   - تغيير نسبة شحن البطارية لحظياً بين **1% و 100%** عبر شاشة اللمس الملونة أو أوامر الـ Serial من الكمبيوتر.
-   - ينعكس التغيير فوراً داخل إعدادات بطارية الآيفون وشريط الحالة العلوي دون الحاجة لإعادة تشغيل الهاتف.
-
-4. **عزل كهربي فائق الأمان (Safe 1.8V Hardware Level Shifting):**
-   - حماية كاملة لمعالج الآيفون وآيسي الباور (PMU) عبر محول مستويات ثنائي القناة يعتمد على ترانزستورات `BSS138 N-MOSFET`.
-   - مقاومات رفع متزنة بدقة: **4.7kΩ** لجهة الهاتف (1.8V) و **10kΩ** لجهة المعالج (3.3V) لسحب تيار منخفض جداً (0.7mA) ومنع تشوه موجات الـ I2C.
-   - منظم خطي مستقر `AMS1117-1.8V` مزود بمكثف تانتالوم 22µF ومقاومة حمل دائم 150Ω لضمان عدم تجاوز الجهد 1.8V تحت أي ظرف.
-
-5. **مراقبة دقيقة للقدرة والاستهلاك (High-Precision Power Monitoring):**
-   - شريحة `INA226` مدمجة متصلة بناقل I2C داخلي مستقل (3.3V) مع مقاومة شنت 5mΩ.
-   - قراءة حية ومستمرة لجهد وتيار استهلاك الهاتف بدقة مليمترية حتى **5A** وعرضها مباشرة على الشاشة.
+### 📌 Platform Overview (Chipler.net):
+> **CHIPLER (chipler.net):** A specialized engineering platform dedicated to microelectronics, smartphone board-level diagnostic tools, and universal hardware emulators. Our mission is to engineer high-precision, open-source testing solutions that empower repair engineers and electronics technicians globally to diagnose complex logic boards, simulate smart peripherals, and troubleshoot power delivery safely.
 
 ---
 
-## 📖 دليل التجميع الميداني للمبتدئين (Assembly PDF)
+## 🌟 Key Technical Features
 
-إذا كنت ترغب في تجميع البروتوتايب بنفسك على لوحة تجارب (Breadboard)، قمنا بإعداد دليل هندسي شامل ومبسط جداً باللغة العربية:
-* 📥 **[تحميل دليل التجميع المعتمد: docs/CHIPLER_Assembly_AR.pdf](docs/CHIPLER_Assembly_AR.pdf)**
-  - **صور فوتوغرافية حقيقية** لكافة القطع والمكونات المستخدمة من بيئة العمل.
-  - **قائمة القطع الفعلية للشراء (BOM)** بدون أي قطع قديمة أو ملغية.
-  - **رسومات هندسية لاتجاهات الأيسيهات** وتوضيح أرجل (BSS138 SOT-23 و AMS1117 SOT-223).
-  - **جدول توصيل سلك بسلك** ملون ومطابق لأرقام أرجل الـ RP2350.
-  - طريقة لحام وربط فلاتة بطارية الآيفون (B+ و GND و SDA و SCL).
+1. **Full Apple Smart Battery Protocol Emulation (SMBus 1.8V):**
+   - Real-time response to all standard Veridian battery registers (`0x0B`) including voltage, current, temperature, design capacity, and cryptographic authentication queries.
+   - Microsecond-level on-the-fly Packet Error Code (PEC / CRC-8) calculation and verification.
+
+2. **Autonomous Auto-Learn Handshake Engine:**
+   - No manual model selection or complex menu configuration required.
+   - Upon target phone power-up, the firmware listens silently on the bus in `LISTEN` mode, captures the initial PMU query signature, identifies the matching profile (`COMPATIBLE`), and transitions automatically into `RUNNING` mode.
+
+3. **Dynamic State-of-Charge (SOC) Control:**
+   - Instantly adjust the emulated battery percentage between **1% and 100%** via the 3.5" color touchscreen or the PC serial console.
+   - Real-time updates reflect immediately in iOS Settings and the top status bar without restarting the phone.
+
+4. **100% Fail-Safe Hardware Isolation (1.8V Level Shifting):**
+   - Complete protection for the phone's Power Management IC (PMU) via a dual-channel `BSS138 N-MOSFET` bidirectional translator.
+   - High-speed, balanced pull-up network: **4.7kΩ** on the 1.8V phone side and **10kΩ** on the 3.3V MCU side (ultra-low 0.7mA bus loading, crisp square waveforms).
+   - Low-noise linear regulator `AMS1117-1.8V` equipped with a 22µF tantalum output capacitor and a 150Ω permanent minimum load resistor to prevent voltage drift under all conditions.
+
+5. **Integrated Power & Telemetry Monitoring:**
+   - Onboard `INA226` high-precision digital power monitor on a dedicated internal 3.3V I2C bus with a 5mΩ low-side shunt resistor.
+   - Continuous live telemetry measuring phone voltage, current draw (up to **5A continuous**), and power consumption.
 
 ---
 
-## 🗂️ هيكل المستودع (Repository Structure)
+## 📖 Step-by-Step Field Assembly Guide (PDF)
+
+A comprehensive, beginner-friendly assembly manual has been prepared with full photographic evidence:
+* 📥 **[Download English Assembly Guide: docs/CHIPLER_Assembly_Guide_EN.pdf](docs/CHIPLER_Assembly_Guide_EN.pdf)**
+* 📥 **[Download Arabic Assembly Guide: docs/CHIPLER_Assembly_AR.pdf](docs/CHIPLER_Assembly_AR.pdf)**
+  - **Authentic workbench photographs** of every physical component.
+  - **Verified Bill of Materials (BOM)** with all obsolete parts eliminated.
+  - **Detailed SOT-223 and SOT-23 pinout diagrams**.
+  - **Wire-by-wire color-coded breadboard interconnection table**.
+  - Safe phone battery flex termination guide (B+, GND, SDA, SCL).
+
+---
+
+## 🗂️ Repository Directory Structure
 
 ```text
 CHIPLER-Battery-Emulator/
-├── README.md                           # هذا الملف التعريفي الشامل للمشروع
-├── LICENSE                             # رخصة المشروع المفتوح (MIT License)
-├── .gitignore                          # استبعاد ملفات البيلد ومخلفات التجميع
+├── README.md                           # Main documentation (English)
+├── README_AR.md                        # Documentation in Arabic
+├── LICENSE                             # MIT Open Source License (Eng. Hamed Lasheen)
+├── .gitignore                          # Git build and cache exclusions
 ├── docs/
-│   └── CHIPLER_Assembly_AR.pdf         # دليل التجميع الميداني الكامل بالصور والرسومات
+│   ├── CHIPLER_Assembly_Guide_EN.pdf   # Complete Assembly Guide (English Edition)
+│   └── CHIPLER_Assembly_AR.pdf         # Complete Assembly Guide (Arabic Edition)
 ├── firmware/
-│   ├── source/                         # كود المصدر الأساسي الكامل (C / Pico SDK)
-│   │   ├── CMakeLists.txt              # ملف بناء الفيرموير
-│   │   ├── pico_sdk_import.cmake       # ملف ربط الـ Raspberry Pi Pico SDK
-│   │   ├── boards/                     # تعريف بوردة RP2350-USB-A
-│   │   ├── config/                     # إعدادات النظام ومحددات الأمان
-│   │   ├── src/                        # الكود المصدري (auto, batt, hal, ui, gfx, settings)
-│   │   ├── bench/                      # كود فحص المترجمات والمولدات
-│   │   └── tests/                      # 35 جناح اختبار حاسوبي لوحدات النظام
-│   └── releases/                       # ملفات الفيرموير الجاهزة للشحن فوراً (UF2)
-│       ├── CHIPLER_AUTO_LEARN_P1_RC1_fd0c96b.uf2      # الإصدار الأحدث ذاتي التعلم (iPhone 12P & 13P)
-│       ├── CHIPLER_beta_1_063_OWNER_PHONE_r7.uf2     # إصدار المعيار r7 (مثبت بـ 25,000+ قراءة)
-│       └── SHA256SUMS.txt                             # بصمات التحقق المشفرة للملفات
+│   ├── source/                         # Clean canonical C source code (Pico SDK)
+│   │   ├── CMakeLists.txt              # Primary firmware build specification
+│   │   ├── pico_sdk_import.cmake       # Raspberry Pi Pico SDK importer
+│   │   ├── boards/                     # RP2350-USB-A custom board definition
+│   │   ├── config/                     # System parameters & safety boundaries
+│   │   ├── src/                        # Core source tree (auto, batt, hal, ui, gfx, settings)
+│   │   ├── bench/                      # Diagnostic pulse and translator benchmark suites
+│   │   └── tests/                      # 35 host unit test suites (100% CTest pass)
+│   └── releases/                       # Pre-compiled UF2 binaries ready to flash
+│       ├── CHIPLER_AUTO_LEARN_P1_RC1_fd0c96b.uf2      # Latest Auto-Learn build (iPhone 12P & 13P)
+│       ├── CHIPLER_beta_1_063_OWNER_PHONE_r7.uf2     # Milestone r7 baseline (25k+ verified reads)
+│       └── SHA256SUMS.txt                             # Cryptographic SHA256 checksums
 └── tools/
-    ├── chipler_monitor.py              # أداة المراقبة اللحظية للـ SMBus عبر شاشة الكمبيوتر
-    ├── START_MONITOR.bat               # تشغيل برنامج المراقبة بضغطة زر واحدة (Windows)
-    ├── requirements.txt                # متطلبات بايثون (pyserial)
-    └── protocol_knowledge_seed.json    # قاعدة المعرفة الأولية لمسجلات البطارية
+    ├── chipler_monitor.py              # Real-time SMBus protocol & telemetry PC monitor
+    ├── START_MONITOR.bat               # One-click Windows monitor launcher
+    ├── requirements.txt                # Python dependencies (pyserial)
+    └── protocol_knowledge_seed.json    # Initial battery register seed definition
 ```
 
 ---
 
-## ⚡ جدول التوصيلات السريعة (Quick Pinout)
+## ⚡ Quick Pinout Reference
 
-| القطعة | الطرف | يتصل بالمعالج / البريد بورد | الجهد | الوظيفة |
+| Component | Pin | Connects To | Voltage | Function |
 |---|---|---|---|---|
-| **RP2350** | **3V3** | ريل تغذية البريد بورد | 3.3V | تغذية الشاشة + INA226 + دخل AMS1117 |
-| **RP2350** | **GND** | خط الأرضي العام المشترك | 0V | أرضي موحد لكل الدائرة والهاتف |
-| **RP2350** | **GP0** | رجل T_DO بالشاشة | 3.3V | قراءة إحداثيات اللمس (SPI MISO) |
-| **RP2350** | **GP1** | رجل CS بالشاشة | 3.3V | اختيار شريحة الشاشة (LCD Chip Select) |
-| **RP2350** | **GP2** | رجل SCK ورجل T_CLK | 3.3V | كلوك SPI المشترك للشاشة واللمس |
-| **RP2350** | **GP3** | رجل SDI ورجل T_DIN | 3.3V | بيانات SPI المشتركة للشاشة واللمس |
-| **RP2350** | **GP4** | رجل RESET بالشاشة | 3.3V | نبضة إعادة ضبط الشاشة |
-| **RP2350** | **GP5** | رجل DC/RS بالشاشة | 3.3V | تبديل الأوامر والبيانات للشاشة |
-| **RP2350** | **GP6** | رجل Drain لـ Q1 (BSS138) | 3.3V | بيانات البطارية SMBus SDA (مع مقاومة 10k لـ 3.3V) |
-| **RP2350** | **GP7** | رجل Drain لـ Q2 (BSS138) | 3.3V | كلوك البطارية SMBus SCL (مع مقاومة 10k لـ 3.3V) |
-| **RP2350** | **GP8** | رجل SDA بحساس INA226 | 3.3V | ناقل قراءة الفولت والتيار الداخلي |
-| **RP2350** | **GP9** | رجل SCL بحساس INA226 | 3.3V | كلوك ناقل قراءة الفولت والتيار الداخلي |
-| **RP2350** | **GP10** | رجل ALERT بحساس INA226 | 3.3V | إشارة تحذير تجاوز التيار (مفعل بـ Pull-Up داخلي) |
-| **RP2350** | **GP26** | رجل T_CS بالشاشة | 3.3V | اختيار شريحة اللمس (Touch Chip Select) |
-| **RP2350** | **GP27** | رجل T_IRQ بالشاشة | 3.3V | مقاطعة لمس الشاشة (Touch Interrupt) |
-| **AMS1117** | **VOUT (2)** | ريل 1.8V بالبريد بورد | 1.8V | بوابات Q1 و Q2 ومقاومات 4.7k لجهة الهاتف |
-| **Q1 Source** | **Pin 2** | خط **SDA** بفلاتة الآيفون | 1.8V | خط بيانات البطارية الواصل للهاتف (مع 4.7k لـ 1.8V) |
-| **Q2 Source** | **Pin 2** | خط **SCL** بفلاتة الآيفون | 1.8V | خط كلوك البطارية الواصل للهاتف (مع 4.7k لـ 1.8V) |
+| **RP2350** | **3V3** | Breadboard 3.3V Rail | 3.3V | Powers LCD, INA226, and AMS1117 VIN |
+| **RP2350** | **GND** | System Ground Rail | 0V | Common ground for MCU, LCD, sensor, and phone |
+| **RP2350** | **GP0** | LCD Pin T_DO | 3.3V | Touch SPI MISO (Read coordinates) |
+| **RP2350** | **GP1** | LCD Pin CS | 3.3V | LCD Chip Select |
+| **RP2350** | **GP2** | LCD Pins SCK + T_CLK | 3.3V | Shared SPI Clock for Display & Touch |
+| **RP2350** | **GP3** | LCD Pins SDI + T_DIN | 3.3V | Shared SPI MOSI for Display & Touch |
+| **RP2350** | **GP4** | LCD Pin RESET | 3.3V | Hardware Reset for Display Controller |
+| **RP2350** | **GP5** | LCD Pin DC/RS | 3.3V | Display Data / Command Select |
+| **RP2350** | **GP6** | Q1 Drain (BSS138) | 3.3V | Battery SMBus SDA (MCU side + 10kΩ to 3.3V) |
+| **RP2350** | **GP7** | Q2 Drain (BSS138) | 3.3V | Battery SMBus SCL (MCU side + 10kΩ to 3.3V) |
+| **RP2350** | **GP8** | INA226 SDA | 3.3V | Dedicated internal I2C telemetry data |
+| **RP2350** | **GP9** | INA226 SCL | 3.3V | Dedicated internal I2C telemetry clock |
+| **RP2350** | **GP10** | INA226 ALERT | 3.3V | Overcurrent interrupt (internal pull-up enabled) |
+| **RP2350** | **GP26** | LCD Pin T_CS | 3.3V | Touchscreen Chip Select |
+| **RP2350** | **GP27** | LCD Pin T_IRQ | 3.3V | Touchscreen Pen Interrupt |
+| **AMS1117** | **VOUT (2)** | Breadboard 1.8V Rail | 1.8V | Powers Q1/Q2 gates and 4.7kΩ phone-side pull-ups |
+| **Q1 Source** | **Pin 2** | iPhone Battery SDA | 1.8V | Battery SMBus data to phone (+ 4.7kΩ to 1.8V) |
+| **Q2 Source** | **Pin 2** | iPhone Battery SCL | 1.8V | Battery SMBus clock to phone (+ 4.7kΩ to 1.8V) |
 
 ---
 
-## 🚀 كيفية شحن الفيرموير والتشغيل (How to Flash & Run)
+## 🚀 How to Flash & Run
 
-1. **الدخول في وضع التحميل (BOOTSEL Mode):**
-   - اضغط مع الاستمرار على زر `BOOTSEL` على بوردة الـ RP2350.
-   - وصّل كابل الـ USB بالكمبيوتر، ثم اترك الزر.
-   - سيظهر قرص تخزين خارجي على الكمبيوتر باسم `RPI-RP2`.
+1. **Enter BOOTSEL Mode:**
+   - Hold down the `BOOTSEL` button on the RP2350 development board.
+   - Plug the USB cable into your computer, then release the button.
+   - A removable mass storage drive named `RPI-RP2` will appear.
 
-2. **نسخ الفيرموير:**
-   - اسحب ملف الـ UF2 المعتمد:
+2. **Deploy the Firmware:**
+   - Drag and drop the approved UF2 binary:
      [`firmware/releases/CHIPLER_AUTO_LEARN_P1_RC1_fd0c96b.uf2`](firmware/releases/CHIPLER_AUTO_LEARN_P1_RC1_fd0c96b.uf2)
-   - أفلته داخل درايف `RPI-RP2`.
-   - سيعاد تشغيل البوردة تلقائياً وتضيء الشاشة بلوحة القياسات ووضع الاستماع `LISTEN`.
+   - The board will automatically reboot, and the LCD will immediately illuminate displaying the live telemetry interface in `LISTEN` mode.
 
-3. **تشغيل الآيفون:**
-   - اضبط الباور سبلاي الخارجي على **4.0V** وحد تيار **2.5A**.
-   - وصّل خرج الباور سبلاي بحساس INA226 وريش فلاتة بطارية الآيفون (B+ و GND).
-   - وصّل خطوط البيانات (SDA و SCL من خارج الترانزستور 1.8V) بريش البطارية.
-   - اضغط زر تشغيل الآيفون؛ سيتعرف المحاكي تلقائياً على الهاتف، وتتحول الشاشة إلى `RUNNING`، وتظهر نسبة الشحن فوراً على شاشة الآيفون.
+3. **Power & Boot the Target Phone:**
+   - Set an external regulated DC bench power supply to **4.0V** with a **2.5A** current limit.
+   - Connect the power supply through the INA226 shunt to the phone battery flex (B+ and GND).
+   - Connect the 1.8V level-shifted SDA and SCL lines to the phone battery flex.
+   - Press the iPhone power button. The emulator will automatically detect the bus transactions, transition to `RUNNING` mode, and display the battery percentage on the iPhone screen.
 
-4. **المراقبة اللحظية عبر الكمبيوتر (اختياري):**
-   - افتح مجلد [`tools/`](tools/) واضغط ضغطتين على [`START_MONITOR.bat`](tools/START_MONITOR.bat).
-   - سيتعرف البرنامج تلقائياً على منفذ الـ COM ويعرض لك حزم بيانات SMBus وأوامر الفحص والاستجابات والـ CRC-8 مباشرة.
-
----
-
-## 🧪 نتائج الاختبارات البرمجية والتحقق (Test Results)
-
-اجتاز كود المصدر كافة اختبارات الجودة بنسبة **100%**:
-- **35/35 جناح اختبار حاسوبي (CTest)** بنجاح تام في 1.19 ثانية.
-- **225 فحصاً لمحرك التعلم AUTO LEARN** والتحقق من حفظ البروفايل بالفلاش بنظام Fail-Closed.
-- **7,886 فحصاً لمسارات واجهة المستخدم** والتأكد من إلغاء تعقيدات الاختيار اليدوي لموديل الهاتف.
-- **إثبات عملي ميداني:** إقلاع هاتف **iPhone 12 Pro** وهاتف **iPhone 13 Pro** بنجاح واستقرار تامين، وتعديل النسبة لـ 100% وظهورها على الهاتف دون أي كراش أو أخطاء ناقل.
+4. **Live PC Monitoring (Optional):**
+   - Open the [`tools/`](tools/) folder and double-click [`START_MONITOR.bat`](tools/START_MONITOR.bat).
+   - The script will automatically detect the COM port and stream live SMBus packet traffic, CRC-8 checks, and telemetry to your terminal.
 
 ---
 
-## 📜 رخصة الاستخدام (License)
+## 🧪 Verification & Test Suite
 
-هذا المشروع منشور تحت ترخيص **[MIT License](LICENSE)** المفتوح المصدر — يحق لك الاستخدام والتعديل والتطوير مع الحفاظ على حقوق الملكية الفكرية للمطور والمنصة:  
-**م. حامد لاشين — منصة تشيبلر للإلكترونيات (chipler.net)**.
+The codebase has undergone rigorous engineering testing and passed with **100% compliance**:
+- **35/35 Host Unit Test Suites (CTest):** 100% PASS in 1.19 seconds.
+- **225 Auto-Learn Assertions:** Full verification of the handshake engine, fail-closed flash persistence, and profile matching.
+- **7,886 UI Test Cycles:** Complete regression test verifying automatic mode transitions without manual picker intervention.
+- **Physical Hardware Verification:** Live boot verified on **iPhone 12 Pro** and **iPhone 13 Pro**, with real-time SOC adjustment (50% to 100%) confirmed on the device display.
 
 ---
 
-## 📬 تواصل مع المطور (Contact & Support)
+## 📜 License
 
-* 🌐 **الموقع الإلكتروني:** [chipler.net](https://chipler.net/)
-* 📘 **فيسبوك:** [facebook.com/Chipler.eg](https://www.facebook.com/Chipler.eg)
-* 💼 لأي استفسارات تقنية أو شراكات تطوير أجهزة المحاكاة وفحص الهواتف، يرجى التواصل عبر الروابط الرسمية أعلاه.
+This project is licensed under the open-source **[MIT License](LICENSE)**. You are free to use, modify, and distribute this software with attribution to the author:  
+**Eng. Hamed Lasheen — CHIPLER Platform (chipler.net)**.
+
+---
+
+## 📬 Contact & Inquiries
+
+* 🌐 **Website:** [chipler.net](https://chipler.net/)
+* 📘 **Facebook:** [facebook.com/Chipler.eg](https://www.facebook.com/Chipler.eg)
+* 💼 For technical inquiries, collaboration, or hardware diagnostic tools development, please reach out through the official links above.
