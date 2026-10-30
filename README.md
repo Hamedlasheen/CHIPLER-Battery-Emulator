@@ -50,11 +50,18 @@
 
 ---
 
+## 📥 Official Downloads & Package Center
+
+> 🚀 **Download the complete package exclusively at:**  
+> ### 🌐 [https://chipler.net/](https://chipler.net/)
+> Visit the official Chipler portal to download the ready-to-flash firmware (`.uf2`), high-resolution assembly guides, and complete wiring schematics.
+
+---
+
 ## 📖 Step-by-Step Field Assembly Guide (PDF)
 
 A comprehensive, beginner-friendly assembly manual has been prepared with full photographic evidence:
-* 📥 **[Download English Assembly Guide: docs/CHIPLER_Assembly_Guide_EN.pdf](docs/CHIPLER_Assembly_Guide_EN.pdf)**
-* 📥 **[Download Arabic Assembly Guide: docs/CHIPLER_Assembly_AR.pdf](docs/CHIPLER_Assembly_AR.pdf)**
+* 🌐 **[Download Assembly Guides & Firmware via chipler.net](https://chipler.net/)**
   - **Official product photographs** of every physical component.
   - **Complete Bill of Materials (BOM)** with verified component ratings.
   - **Detailed SOT-223 and SOT-23 pinout diagrams**.
