@@ -1,0 +1,1 @@
+Copied unmodified from 07_Test_Evidence/DEEPSEEK_Team/DS-TOUCH-12/tests (DeepSeek DS-TOUCH-12 + delta). Built with -DDS_PATCHED against this tree's touch_core.c, which now contains DeepSeek's patch DS-TOUCH-12_touch_core_and_main.patch (touch_core.c/.h applied verbatim; the main.c hunk re-applied by hand because main.c moved on).

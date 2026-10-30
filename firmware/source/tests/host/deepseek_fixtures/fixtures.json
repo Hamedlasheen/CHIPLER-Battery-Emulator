@@ -1,0 +1,1508 @@
+{
+  "schema": "ds-irq-03.fixtures.v1",
+  "generator": "fixtures/gen_fixtures.py",
+  "source": "DS-IRQ-03 explicit IRQ event batches; expected counters from the Python reference implementation of the beta1 smbus_target/live_wire contract; register bits from pico-sdk 2.3.0 rp2350 hardware_regs/i2c.h (sha256 82a7ef90ce140da6c0df10c5d7e60fa7a391b87ef8447008e5a8f01a176518e7)",
+  "base_sha256": {
+    "beta1/SOURCE/src/hal/live_port.c": "90642cec1ca068e09bc2a60213917ba101de0a763f80f0f751bd0ba05f0b41d3",
+    "beta1/SOURCE/src/hal/live_port.h": "983cd20bd7fce4847c0385faa6067abe55465386355e892ac812bf08df3ab13b",
+    "beta1/SOURCE/src/batt/live_wire.c": "f195235ae6f002b2885c4970f80aaef345d35ff2f000f8f7586899f8bd02c35e",
+    "beta1/SOURCE/src/batt/live_wire.h": "84f8efc9c7ee93b66305bb6a2bc86f8d2b089c1a9d92c90444e3bc3b79fbaa84",
+    "beta1/SOURCE/src/batt/smbus_target.c": "f86363ccc3783de960480d5d3aac2242100ffa5e60ce494cd9fb3a65e798f8fe",
+    "beta1/SOURCE/src/batt/smbus_target.h": "85f93d9a93649a5b756c49f4d9379f7ed20337895a302f83dd7149b23e957ee2",
+    "beta1/SOURCE/config/board_config.h": "5d10b6b94635d77ad20699eb89e7cb06d5ac847909d55a2589f5a1f52cb5b247"
+  },
+  "assumption_notes": [
+    "Batches are raw IC_RAW_INTR_STAT snapshots a single IRQ handler invocation sees.",
+    "Each RD_REQ batch carries one byte from the TX FIFO (the handler writes it).",
+    "HYPOTHESIS fixtures (hypothesis=true) model IRQ-latency coalescing that the bus model can produce but the harness does NOT prove happens on silicon."
+  ],
+  "fixtures": [
+    {
+      "id": "F01_word_read_0x09",
+      "description": "0x09 command byte then repeated-START read: RD_REQ per byte, 2 data + PEC, NACK last",
+      "hypothesis": false,
+      "source": "DS-IRQ-03 synthetic protocol probe; no iPhone data",
+      "batches": [
+        [
+          1028,
+          [
+            [
+              9,
+              true
+            ]
+          ],
+          0
+        ],
+        [
+          5152,
+          [],
+          1
+        ],
+        [
+          32,
+          [],
+          1
+        ],
+        [
+          32,
+          [],
+          1
+        ],
+        [
+          128,
+          [],
+          0
+        ],
+        [
+          512,
+          [],
+          0
+        ]
+      ],
+      "expect": {
+        "txns": 1,
+        "reads_done": 1,
+        "reads_short": 0,
+        "writes_ok": 0,
+        "writes_bad": 0,
+        "unknown_reads": 0,
+        "bad_len": 0,
+        "overreads": 0,
+        "aborts": 0,
+        "queue_dropped": 0,
+        "rx_bytes": 1,
+        "tx_bytes": 3,
+        "fault": 0
+      },
+      "expect_patched": {
+        "txns": 1,
+        "reads_done": 1,
+        "reads_short": 0,
+        "writes_ok": 0,
+        "writes_bad": 0,
+        "unknown_reads": 0,
+        "bad_len": 0,
+        "overreads": 0,
+        "aborts": 0,
+        "queue_dropped": 0,
+        "rx_bytes": 1,
+        "tx_bytes": 3,
+        "fault": 0
+      },
+      "tx_expected": [
+        59,
+        42,
+        211
+      ],
+      "tx_expected_patched": [
+        59,
+        42,
+        211
+      ],
+      "sha256": "54ef5f18e726b912303965a2dad5f7bcc5d2b6d5613ebeebfd1ef6f7ab60047d"
+    },
+    {
+      "id": "F02_block_read_0x20",
+      "description": "0x20 command byte then block read: length byte + payload + PEC",
+      "hypothesis": false,
+      "source": "DS-IRQ-03 synthetic protocol probe; no iPhone data",
+      "batches": [
+        [
+          1028,
+          [
+            [
+              32,
+              true
+            ]
+          ],
+          0
+        ],
+        [
+          5152,
+          [],
+          1
+        ],
+        [
+          32,
+          [],
+          1
+        ],
+        [
+          32,
+          [],
+          1
+        ],
+        [
+          32,
+          [],
+          1
+        ],
+        [
+          32,
+          [],
+          1
+        ],
+        [
+          32,
+          [],
+          1
+        ],
+        [
+          32,
+          [],
+          1
+        ],
+        [
+          128,
+          [],
+          0
+        ],
+        [
+          512,
+          [],
+          0
+        ]
+      ],
+      "expect": {
+        "txns": 1,
+        "reads_done": 1,
+        "reads_short": 0,
+        "writes_ok": 0,
+        "writes_bad": 0,
+        "unknown_reads": 0,
+        "bad_len": 0,
+        "overreads": 0,
+        "aborts": 0,
+        "queue_dropped": 0,
+        "rx_bytes": 1,
+        "tx_bytes": 7,
+        "fault": 0
+      },
+      "expect_patched": {
+        "txns": 1,
+        "reads_done": 1,
+        "reads_short": 0,
+        "writes_ok": 0,
+        "writes_bad": 0,
+        "unknown_reads": 0,
+        "bad_len": 0,
+        "overreads": 0,
+        "aborts": 0,
+        "queue_dropped": 0,
+        "rx_bytes": 1,
+        "tx_bytes": 7,
+        "fault": 0
+      },
+      "tx_expected": [
+        5,
+        65,
+        66,
+        67,
+        68,
+        69,
+        66
+      ],
+      "tx_expected_patched": [
+        5,
+        65,
+        66,
+        67,
+        68,
+        69,
+        66
+      ],
+      "sha256": "3bbee4b0a58e928366abb354425da1bb6fcea659b159510159d9cab6531419c3"
+    },
+    {
+      "id": "F03_a8_short_read",
+      "description": "A8 block: read only the length byte then NACK+STOP -> ST_SHORT_A8 path",
+      "hypothesis": false,
+      "source": "DS-IRQ-03 synthetic protocol probe; no iPhone data",
+      "batches": [
+        [
+          1028,
+          [
+            [
+              168,
+              true
+            ]
+          ],
+          0
+        ],
+        [
+          5152,
+          [],
+          1
+        ],
+        [
+          640,
+          [],
+          0
+        ]
+      ],
+      "expect": {
+        "txns": 1,
+        "reads_done": 0,
+        "reads_short": 1,
+        "writes_ok": 0,
+        "writes_bad": 0,
+        "unknown_reads": 0,
+        "bad_len": 0,
+        "overreads": 0,
+        "aborts": 0,
+        "queue_dropped": 0,
+        "rx_bytes": 1,
+        "tx_bytes": 1,
+        "fault": 0
+      },
+      "expect_patched": {
+        "txns": 1,
+        "reads_done": 0,
+        "reads_short": 1,
+        "writes_ok": 0,
+        "writes_bad": 0,
+        "unknown_reads": 0,
+        "bad_len": 0,
+        "overreads": 0,
+        "aborts": 0,
+        "queue_dropped": 0,
+        "rx_bytes": 1,
+        "tx_bytes": 1,
+        "fault": 0
+      },
+      "tx_expected": [
+        24
+      ],
+      "tx_expected_patched": [
+        24
+      ],
+      "sha256": "9af181fc544016211b20ec293aaaa5c6a0ad316052af07fa374e9d94d560650a"
+    },
+    {
+      "id": "F04_write_commit_at_stop",
+      "description": "0x50 word write with correct PEC: nothing committed before STOP, queued at STOP",
+      "hypothesis": false,
+      "source": "DS-IRQ-03 synthetic protocol probe; no iPhone data",
+      "batches": [
+        [
+          1028,
+          [
+            [
+              80,
+              true
+            ],
+            [
+              17,
+              false
+            ],
+            [
+              34,
+              false
+            ],
+            [
+              155,
+              false
+            ]
+          ],
+          0
+        ],
+        [
+          512,
+          [],
+          0
+        ]
+      ],
+      "expect": {
+        "txns": 1,
+        "reads_done": 0,
+        "reads_short": 0,
+        "writes_ok": 1,
+        "writes_bad": 0,
+        "unknown_reads": 0,
+        "bad_len": 0,
+        "overreads": 0,
+        "aborts": 0,
+        "queue_dropped": 0,
+        "rx_bytes": 4,
+        "tx_bytes": 0,
+        "fault": 0
+      },
+      "expect_patched": {
+        "txns": 1,
+        "reads_done": 0,
+        "reads_short": 0,
+        "writes_ok": 1,
+        "writes_bad": 0,
+        "unknown_reads": 0,
+        "bad_len": 0,
+        "overreads": 0,
+        "aborts": 0,
+        "queue_dropped": 0,
+        "rx_bytes": 4,
+        "tx_bytes": 0,
+        "fault": 0
+      },
+      "tx_expected": [],
+      "tx_expected_patched": [],
+      "sha256": "a5fe95ab73eacb480718dbe020140f9d8860e228f260ed85cf990e138d751c82"
+    },
+    {
+      "id": "F05_write_bad_pec_isolates",
+      "description": "0x50 word write with corrupted PEC -> writes_bad=1 and isolation",
+      "hypothesis": false,
+      "source": "DS-IRQ-03 synthetic protocol probe; no iPhone data",
+      "batches": [
+        [
+          1028,
+          [
+            [
+              80,
+              true
+            ],
+            [
+              17,
+              false
+            ],
+            [
+              34,
+              false
+            ],
+            [
+              100,
+              false
+            ]
+          ],
+          0
+        ],
+        [
+          512,
+          [],
+          0
+        ]
+      ],
+      "expect": {
+        "txns": 1,
+        "reads_done": 0,
+        "reads_short": 0,
+        "writes_ok": 0,
+        "writes_bad": 1,
+        "unknown_reads": 0,
+        "bad_len": 0,
+        "overreads": 0,
+        "aborts": 0,
+        "queue_dropped": 0,
+        "rx_bytes": 4,
+        "tx_bytes": 0,
+        "fault": 1
+      },
+      "expect_patched": {
+        "txns": 1,
+        "reads_done": 0,
+        "reads_short": 0,
+        "writes_ok": 0,
+        "writes_bad": 1,
+        "unknown_reads": 0,
+        "bad_len": 0,
+        "overreads": 0,
+        "aborts": 0,
+        "queue_dropped": 0,
+        "rx_bytes": 4,
+        "tx_bytes": 0,
+        "fault": 1
+      },
+      "tx_expected": [],
+      "tx_expected_patched": [],
+      "sha256": "1a57cb5bcac4bb95e9026743018678f033f6812bcccd2a262f0d4094cb66c4f3"
+    },
+    {
+      "id": "F06_write_burst5_queue_overflow",
+      "description": "5 STOP-committed writes without a main-loop consumer: 4 queued, 5th queue full -> isolate",
+      "hypothesis": false,
+      "source": "DS-IRQ-03 synthetic protocol probe; no iPhone data",
+      "batches": [
+        [
+          1028,
+          [
+            [
+              80,
+              true
+            ],
+            [
+              16,
+              false
+            ],
+            [
+              119,
+              false
+            ],
+            [
+              34,
+              false
+            ]
+          ],
+          0
+        ],
+        [
+          512,
+          [],
+          0
+        ],
+        [
+          1028,
+          [
+            [
+              80,
+              true
+            ],
+            [
+              17,
+              false
+            ],
+            [
+              119,
+              false
+            ],
+            [
+              55,
+              false
+            ]
+          ],
+          0
+        ],
+        [
+          512,
+          [],
+          0
+        ],
+        [
+          1028,
+          [
+            [
+              80,
+              true
+            ],
+            [
+              18,
+              false
+            ],
+            [
+              119,
+              false
+            ],
+            [
+              8,
+              false
+            ]
+          ],
+          0
+        ],
+        [
+          512,
+          [],
+          0
+        ],
+        [
+          1028,
+          [
+            [
+              80,
+              true
+            ],
+            [
+              19,
+              false
+            ],
+            [
+              119,
+              false
+            ],
+            [
+              29,
+              false
+            ]
+          ],
+          0
+        ],
+        [
+          512,
+          [],
+          0
+        ],
+        [
+          1028,
+          [
+            [
+              80,
+              true
+            ],
+            [
+              20,
+              false
+            ],
+            [
+              119,
+              false
+            ],
+            [
+              118,
+              false
+            ]
+          ],
+          0
+        ],
+        [
+          512,
+          [],
+          0
+        ]
+      ],
+      "expect": {
+        "txns": 5,
+        "reads_done": 0,
+        "reads_short": 0,
+        "writes_ok": 4,
+        "writes_bad": 1,
+        "unknown_reads": 0,
+        "bad_len": 0,
+        "overreads": 0,
+        "aborts": 0,
+        "queue_dropped": 1,
+        "rx_bytes": 20,
+        "tx_bytes": 0,
+        "fault": 1
+      },
+      "expect_patched": {
+        "txns": 5,
+        "reads_done": 0,
+        "reads_short": 0,
+        "writes_ok": 4,
+        "writes_bad": 1,
+        "unknown_reads": 0,
+        "bad_len": 0,
+        "overreads": 0,
+        "aborts": 0,
+        "queue_dropped": 1,
+        "rx_bytes": 20,
+        "tx_bytes": 0,
+        "fault": 1
+      },
+      "tx_expected": [],
+      "tx_expected_patched": [],
+      "sha256": "2d6cc0a383a85bff7082bce22136de6a644d543981953a9f5d939ac072cbbe27"
+    },
+    {
+      "id": "F07_frame35_split_16_16_3",
+      "description": "35-byte write frame (cmd+count+32+PEC) split into RX batches 16/16/3 and committed once at STOP",
+      "hypothesis": false,
+      "source": "DS-IRQ-03 synthetic protocol probe; no iPhone data",
+      "batches": [
+        [
+          1028,
+          [
+            [
+              82,
+              true
+            ],
+            [
+              32,
+              false
+            ],
+            [
+              48,
+              false
+            ],
+            [
+              49,
+              false
+            ],
+            [
+              50,
+              false
+            ],
+            [
+              51,
+              false
+            ],
+            [
+              52,
+              false
+            ],
+            [
+              53,
+              false
+            ],
+            [
+              54,
+              false
+            ],
+            [
+              55,
+              false
+            ],
+            [
+              56,
+              false
+            ],
+            [
+              57,
+              false
+            ],
+            [
+              58,
+              false
+            ],
+            [
+              59,
+              false
+            ],
+            [
+              60,
+              false
+            ],
+            [
+              61,
+              false
+            ]
+          ],
+          0
+        ],
+        [
+          4,
+          [
+            [
+              62,
+              false
+            ],
+            [
+              63,
+              false
+            ],
+            [
+              64,
+              false
+            ],
+            [
+              65,
+              false
+            ],
+            [
+              66,
+              false
+            ],
+            [
+              67,
+              false
+            ],
+            [
+              68,
+              false
+            ],
+            [
+              69,
+              false
+            ],
+            [
+              70,
+              false
+            ],
+            [
+              71,
+              false
+            ],
+            [
+              72,
+              false
+            ],
+            [
+              73,
+              false
+            ],
+            [
+              74,
+              false
+            ],
+            [
+              75,
+              false
+            ],
+            [
+              76,
+              false
+            ],
+            [
+              77,
+              false
+            ]
+          ],
+          0
+        ],
+        [
+          516,
+          [
+            [
+              78,
+              false
+            ],
+            [
+              79,
+              false
+            ],
+            [
+              42,
+              false
+            ]
+          ],
+          0
+        ]
+      ],
+      "expect": {
+        "txns": 1,
+        "reads_done": 0,
+        "reads_short": 0,
+        "writes_ok": 1,
+        "writes_bad": 0,
+        "unknown_reads": 0,
+        "bad_len": 0,
+        "overreads": 0,
+        "aborts": 0,
+        "queue_dropped": 0,
+        "rx_bytes": 35,
+        "tx_bytes": 0,
+        "fault": 0
+      },
+      "expect_patched": {
+        "txns": 1,
+        "reads_done": 0,
+        "reads_short": 0,
+        "writes_ok": 1,
+        "writes_bad": 0,
+        "unknown_reads": 0,
+        "bad_len": 0,
+        "overreads": 0,
+        "aborts": 0,
+        "queue_dropped": 0,
+        "rx_bytes": 35,
+        "tx_bytes": 0,
+        "fault": 0
+      },
+      "tx_expected": [],
+      "tx_expected_patched": [],
+      "sha256": "04f645523d7cddf159b748e7fafea13dbb45adbce4ddca4220e97fb14fdccd4f"
+    },
+    {
+      "id": "F08_stop_first_while_idle_gap",
+      "description": "batch holding previous STOP + new START+first byte while engine idle: current code misattributes STOP, consumes the byte as pointer-only; next byte isolates",
+      "hypothesis": true,
+      "source": "DS-IRQ-03 synthetic protocol probe; no iPhone data",
+      "batches": [
+        [
+          1536,
+          [
+            [
+              80,
+              true
+            ]
+          ],
+          0
+        ],
+        [
+          4,
+          [
+            [
+              17,
+              false
+            ]
+          ],
+          0
+        ]
+      ],
+      "expect": {
+        "txns": 1,
+        "reads_done": 0,
+        "reads_short": 0,
+        "writes_ok": 0,
+        "writes_bad": 0,
+        "unknown_reads": 0,
+        "bad_len": 0,
+        "overreads": 0,
+        "aborts": 0,
+        "queue_dropped": 0,
+        "rx_bytes": 1,
+        "tx_bytes": 0,
+        "fault": 1
+      },
+      "expect_patched": {
+        "txns": 0,
+        "reads_done": 0,
+        "reads_short": 0,
+        "writes_ok": 0,
+        "writes_bad": 0,
+        "unknown_reads": 0,
+        "bad_len": 0,
+        "overreads": 0,
+        "aborts": 0,
+        "queue_dropped": 0,
+        "rx_bytes": 0,
+        "tx_bytes": 0,
+        "fault": 1
+      },
+      "tx_expected": [],
+      "tx_expected_patched": [],
+      "sha256": "976b7f25313d42ab5ac9b49126bb8bdfaa4bb6a8c8f8cdaf8f7c6712610fc1bf"
+    },
+    {
+      "id": "F09_stop_and_request_same_batch",
+      "description": "STOP_DET and RD_REQ in the same IRQ snapshot -> boundary ordering unknown -> isolate",
+      "hypothesis": true,
+      "source": "DS-IRQ-03 synthetic protocol probe; no iPhone data",
+      "batches": [
+        [
+          1028,
+          [
+            [
+              9,
+              true
+            ]
+          ],
+          0
+        ],
+        [
+          5152,
+          [],
+          1
+        ],
+        [
+          544,
+          [],
+          0
+        ]
+      ],
+      "expect": {
+        "txns": 0,
+        "reads_done": 0,
+        "reads_short": 0,
+        "writes_ok": 0,
+        "writes_bad": 0,
+        "unknown_reads": 0,
+        "bad_len": 0,
+        "overreads": 0,
+        "aborts": 1,
+        "queue_dropped": 0,
+        "rx_bytes": 1,
+        "tx_bytes": 1,
+        "fault": 1
+      },
+      "expect_patched": {
+        "txns": 0,
+        "reads_done": 0,
+        "reads_short": 0,
+        "writes_ok": 0,
+        "writes_bad": 0,
+        "unknown_reads": 0,
+        "bad_len": 0,
+        "overreads": 0,
+        "aborts": 1,
+        "queue_dropped": 0,
+        "rx_bytes": 1,
+        "tx_bytes": 1,
+        "fault": 1
+      },
+      "tx_expected": [
+        59
+      ],
+      "tx_expected_patched": [
+        59
+      ],
+      "sha256": "f6d22741322db85c64cbcd7c101ce303bd39d10500e94afcb6379734d2f8852d"
+    },
+    {
+      "id": "F10_first_twice_batch",
+      "description": "two FIRST_DATA_BYTE entries in one batch (two transactions coalesced) -> isolate",
+      "hypothesis": true,
+      "source": "DS-IRQ-03 synthetic protocol probe; no iPhone data",
+      "batches": [
+        [
+          1028,
+          [
+            [
+              80,
+              true
+            ]
+          ],
+          0
+        ],
+        [
+          512,
+          [],
+          0
+        ],
+        [
+          1028,
+          [
+            [
+              80,
+              true
+            ],
+            [
+              81,
+              true
+            ]
+          ],
+          0
+        ]
+      ],
+      "expect": {
+        "txns": 1,
+        "reads_done": 0,
+        "reads_short": 0,
+        "writes_ok": 0,
+        "writes_bad": 0,
+        "unknown_reads": 0,
+        "bad_len": 0,
+        "overreads": 0,
+        "aborts": 0,
+        "queue_dropped": 0,
+        "rx_bytes": 1,
+        "tx_bytes": 0,
+        "fault": 1
+      },
+      "expect_patched": {
+        "txns": 1,
+        "reads_done": 0,
+        "reads_short": 0,
+        "writes_ok": 0,
+        "writes_bad": 0,
+        "unknown_reads": 0,
+        "bad_len": 0,
+        "overreads": 0,
+        "aborts": 0,
+        "queue_dropped": 0,
+        "rx_bytes": 1,
+        "tx_bytes": 0,
+        "fault": 1
+      },
+      "tx_expected": [],
+      "tx_expected_patched": [],
+      "sha256": "34933bb61816e8b3657f6eb2e160c695069bf0d905a3379efdc5631cbfb7e04e"
+    },
+    {
+      "id": "F11_rx_while_reading_stop",
+      "description": "RX byte while slave-transmitter read in progress + STOP in same batch -> isolate",
+      "hypothesis": true,
+      "source": "DS-IRQ-03 synthetic protocol probe; no iPhone data",
+      "batches": [
+        [
+          1028,
+          [
+            [
+              9,
+              true
+            ]
+          ],
+          0
+        ],
+        [
+          5152,
+          [],
+          1
+        ],
+        [
+          516,
+          [
+            [
+              17,
+              false
+            ]
+          ],
+          0
+        ]
+      ],
+      "expect": {
+        "txns": 0,
+        "reads_done": 0,
+        "reads_short": 0,
+        "writes_ok": 0,
+        "writes_bad": 0,
+        "unknown_reads": 0,
+        "bad_len": 0,
+        "overreads": 0,
+        "aborts": 1,
+        "queue_dropped": 0,
+        "rx_bytes": 1,
+        "tx_bytes": 1,
+        "fault": 1
+      },
+      "expect_patched": {
+        "txns": 0,
+        "reads_done": 0,
+        "reads_short": 0,
+        "writes_ok": 0,
+        "writes_bad": 0,
+        "unknown_reads": 0,
+        "bad_len": 0,
+        "overreads": 0,
+        "aborts": 1,
+        "queue_dropped": 0,
+        "rx_bytes": 1,
+        "tx_bytes": 1,
+        "fault": 1
+      },
+      "tx_expected": [
+        59
+      ],
+      "tx_expected_patched": [
+        59
+      ],
+      "sha256": "5b06e89d7baa5c0ea5ad2161c3ffa8ae29b47026203973d4c3ed0fdbeccda315"
+    },
+    {
+      "id": "F12_last_rdreq_nack_stop_batch",
+      "description": "RD_REQ + RX_DONE + STOP_DET coalesced -> stop&&request rejection (read already complete)",
+      "hypothesis": true,
+      "source": "DS-IRQ-03 synthetic protocol probe; no iPhone data",
+      "batches": [
+        [
+          1028,
+          [
+            [
+              9,
+              true
+            ]
+          ],
+          0
+        ],
+        [
+          5152,
+          [],
+          1
+        ],
+        [
+          32,
+          [],
+          1
+        ],
+        [
+          32,
+          [],
+          1
+        ],
+        [
+          672,
+          [],
+          0
+        ]
+      ],
+      "expect": {
+        "txns": 0,
+        "reads_done": 0,
+        "reads_short": 0,
+        "writes_ok": 0,
+        "writes_bad": 0,
+        "unknown_reads": 0,
+        "bad_len": 0,
+        "overreads": 0,
+        "aborts": 1,
+        "queue_dropped": 0,
+        "rx_bytes": 1,
+        "tx_bytes": 3,
+        "fault": 1
+      },
+      "expect_patched": {
+        "txns": 0,
+        "reads_done": 0,
+        "reads_short": 0,
+        "writes_ok": 0,
+        "writes_bad": 0,
+        "unknown_reads": 0,
+        "bad_len": 0,
+        "overreads": 0,
+        "aborts": 1,
+        "queue_dropped": 0,
+        "rx_bytes": 1,
+        "tx_bytes": 3,
+        "fault": 1
+      },
+      "tx_expected": [
+        59,
+        42,
+        211
+      ],
+      "tx_expected_patched": [
+        59,
+        42,
+        211
+      ],
+      "sha256": "36627b0731ae19c3867c586051b42f0c531426fb6e17f78a3714500bde8130b3"
+    },
+    {
+      "id": "F13_stop_without_nack",
+      "description": "all word bytes clocked but master ACKs every byte then STOPs: no NACK -> abort",
+      "hypothesis": false,
+      "source": "DS-IRQ-03 synthetic protocol probe; no iPhone data",
+      "batches": [
+        [
+          1028,
+          [
+            [
+              9,
+              true
+            ]
+          ],
+          0
+        ],
+        [
+          5152,
+          [],
+          1
+        ],
+        [
+          32,
+          [],
+          1
+        ],
+        [
+          32,
+          [],
+          1
+        ],
+        [
+          512,
+          [],
+          0
+        ]
+      ],
+      "expect": {
+        "txns": 1,
+        "reads_done": 0,
+        "reads_short": 0,
+        "writes_ok": 0,
+        "writes_bad": 0,
+        "unknown_reads": 0,
+        "bad_len": 0,
+        "overreads": 0,
+        "aborts": 1,
+        "queue_dropped": 0,
+        "rx_bytes": 1,
+        "tx_bytes": 3,
+        "fault": 1
+      },
+      "expect_patched": {
+        "txns": 1,
+        "reads_done": 0,
+        "reads_short": 0,
+        "writes_ok": 0,
+        "writes_bad": 0,
+        "unknown_reads": 0,
+        "bad_len": 0,
+        "overreads": 0,
+        "aborts": 1,
+        "queue_dropped": 0,
+        "rx_bytes": 1,
+        "tx_bytes": 3,
+        "fault": 1
+      },
+      "tx_expected": [
+        59,
+        42,
+        211
+      ],
+      "tx_expected_patched": [
+        59,
+        42,
+        211
+      ],
+      "sha256": "3f614b5718d37c0c778c2c97e2e7d8e41db1c341e16dc7efd57f2011c890db9e"
+    },
+    {
+      "id": "F14_commandless_read_first_event",
+      "description": "RD_REQ with no command byte as first event after start: engine inactive -> isolate (T06 transaction 1 is a commandless 0x0B read)",
+      "hypothesis": false,
+      "source": "DS-IRQ-03 synthetic protocol probe; no iPhone data",
+      "batches": [
+        [
+          1056,
+          [],
+          0
+        ]
+      ],
+      "expect": {
+        "txns": 0,
+        "reads_done": 0,
+        "reads_short": 0,
+        "writes_ok": 0,
+        "writes_bad": 0,
+        "unknown_reads": 0,
+        "bad_len": 0,
+        "overreads": 0,
+        "aborts": 0,
+        "queue_dropped": 0,
+        "rx_bytes": 0,
+        "tx_bytes": 0,
+        "fault": 1
+      },
+      "expect_patched": {
+        "txns": 0,
+        "reads_done": 0,
+        "reads_short": 0,
+        "writes_ok": 0,
+        "writes_bad": 0,
+        "unknown_reads": 0,
+        "bad_len": 0,
+        "overreads": 0,
+        "aborts": 0,
+        "queue_dropped": 0,
+        "rx_bytes": 0,
+        "tx_bytes": 0,
+        "fault": 1
+      },
+      "tx_expected": [],
+      "tx_expected_patched": [],
+      "sha256": "c2cc37a38d4df8cf4d7d703313fc35ad575aaf66a9571ca629e2ec7a992b0fe7"
+    },
+    {
+      "id": "F15_explicit_0x86_pointer_then_read",
+      "description": "explicit 0x86 command byte then a 26-byte block read; no cold default pointer invented",
+      "hypothesis": false,
+      "source": "DS-IRQ-03 synthetic protocol probe; no iPhone data",
+      "batches": [
+        [
+          1028,
+          [
+            [
+              134,
+              true
+            ]
+          ],
+          0
+        ],
+        [
+          5152,
+          [],
+          1
+        ],
+        [
+          32,
+          [],
+          1
+        ],
+        [
+          32,
+          [],
+          1
+        ],
+        [
+          32,
+          [],
+          1
+        ],
+        [
+          32,
+          [],
+          1
+        ],
+        [
+          32,
+          [],
+          1
+        ],
+        [
+          32,
+          [],
+          1
+        ],
+        [
+          32,
+          [],
+          1
+        ],
+        [
+          32,
+          [],
+          1
+        ],
+        [
+          32,
+          [],
+          1
+        ],
+        [
+          32,
+          [],
+          1
+        ],
+        [
+          32,
+          [],
+          1
+        ],
+        [
+          32,
+          [],
+          1
+        ],
+        [
+          32,
+          [],
+          1
+        ],
+        [
+          32,
+          [],
+          1
+        ],
+        [
+          32,
+          [],
+          1
+        ],
+        [
+          32,
+          [],
+          1
+        ],
+        [
+          32,
+          [],
+          1
+        ],
+        [
+          32,
+          [],
+          1
+        ],
+        [
+          32,
+          [],
+          1
+        ],
+        [
+          32,
+          [],
+          1
+        ],
+        [
+          32,
+          [],
+          1
+        ],
+        [
+          32,
+          [],
+          1
+        ],
+        [
+          32,
+          [],
+          1
+        ],
+        [
+          32,
+          [],
+          1
+        ],
+        [
+          32,
+          [],
+          1
+        ],
+        [
+          128,
+          [],
+          0
+        ],
+        [
+          512,
+          [],
+          0
+        ]
+      ],
+      "expect": {
+        "txns": 1,
+        "reads_done": 1,
+        "reads_short": 0,
+        "writes_ok": 0,
+        "writes_bad": 0,
+        "unknown_reads": 0,
+        "bad_len": 0,
+        "overreads": 0,
+        "aborts": 0,
+        "queue_dropped": 0,
+        "rx_bytes": 1,
+        "tx_bytes": 26,
+        "fault": 0
+      },
+      "expect_patched": {
+        "txns": 1,
+        "reads_done": 1,
+        "reads_short": 0,
+        "writes_ok": 0,
+        "writes_bad": 0,
+        "unknown_reads": 0,
+        "bad_len": 0,
+        "overreads": 0,
+        "aborts": 0,
+        "queue_dropped": 0,
+        "rx_bytes": 1,
+        "tx_bytes": 26,
+        "fault": 0
+      },
+      "tx_expected": [
+        24,
+        160,
+        161,
+        162,
+        163,
+        164,
+        165,
+        166,
+        167,
+        168,
+        169,
+        170,
+        171,
+        172,
+        173,
+        174,
+        175,
+        176,
+        177,
+        178,
+        179,
+        180,
+        181,
+        182,
+        183,
+        114
+      ],
+      "tx_expected_patched": [
+        24,
+        160,
+        161,
+        162,
+        163,
+        164,
+        165,
+        166,
+        167,
+        168,
+        169,
+        170,
+        171,
+        172,
+        173,
+        174,
+        175,
+        176,
+        177,
+        178,
+        179,
+        180,
+        181,
+        182,
+        183,
+        114
+      ],
+      "sha256": "5a098276f6e5bb1509ec3ccbcefde5c9400ddfe1e7b0ff5800f6d962e6162ec5"
+    }
+  ]
+}
