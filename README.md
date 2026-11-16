@@ -1,166 +1,134 @@
-# CHIPLER Battery Emulator — Universal Smart Smartphone Battery Emulator
+# CHIPLER Battery Emulator
 
-[![Status](https://img.shields.io/badge/Hardware_Status-Hardware_Verified_Universal-brightgreen.svg)]()
-[![Target](https://img.shields.io/badge/MCU-RP2350_Dual_ARM_Cortex--M33-blue.svg)]()
-[![Bus](https://img.shields.io/badge/Protocol-SMBus_1.8V_Level--Shifted-orange.svg)]()
-[![Tests](https://img.shields.io/badge/Host_Tests-35%2F35_PASS_(100%25)-success.svg)]()
-[![License](https://img.shields.io/badge/License-MIT-lightgrey.svg)](LICENSE)
+**Hardware-level battery protocol emulator for smartphone motherboard diagnostics on a DC bench power supply.**
 
-*Read this in other languages:* [العربية 🇸🇦](README_AR.md)
-
-> **The first open-source hardware emulator for Smartphone Smart Batteries powered by an autonomous Auto-Learn Engine and safe 1.8V bidirectional level shifting, built on the dual-core RP2350 MCU.**  
-> Successfully benchmarked and proven on physical hardware: boots **modern smartphones** without an OEM battery, with real-time battery percentage control (1% – 100%) reflected immediately on the operating system.
+![Platform](https://img.shields.io/badge/MCU-RP2350B-blue)
+![Protocol](https://img.shields.io/badge/Protocols-SWI%20%7C%20I2C%20%7C%20BSI-green)
+![Status](https://img.shields.io/badge/Status-Active%20Development-orange)
+![License](https://img.shields.io/badge/License-MIT-lightgrey)
 
 ---
 
-## 👨‍💻 About the Developer & Platform
+## Overview
 
-* **Lead Developer:** **Eng. Hamed Lasheen**
-* **Organization & Brand:** **CHIPLER**
-* 🌐 **Official Website:** [https://chipler.net/](https://chipler.net/)
-* 📱 **Official Facebook Page:** [https://www.facebook.com/Chipler.eg](https://www.facebook.com/Chipler.eg)
+Modern smartphones verify battery presence, thermal status, and fuel-gauge telemetry at boot and periodically during operation. When powering a logic board from a standard DC bench power supply (`VBAT+` and `GND` only), missing battery communication triggers:
 
-### 📌 Platform Overview (Chipler.net):
-> **CHIPLER (chipler.net):** A specialized engineering platform dedicated to microelectronics, smartphone board-level diagnostic tools, and universal hardware emulators. Our mission is to engineer high-precision, open-source testing solutions that empower repair engineers and electronics technicians globally to diagnose complex logic boards, simulate smart peripherals, and troubleshoot power delivery safely.
+- Continuous boot loops or failure to trigger power-on
+- **3-minute kernel panic reboots** (`Userspace watchdog timeout` / missing thermal & gas-gauge sensors)
+- CPU/GPU throttling and charging circuit lockouts during board-level troubleshooting
 
----
-
-## 🌟 Key Technical Features
-
-1. **Full Apple Smart Battery Protocol Emulation (SMBus 1.8V):**
-   - Real-time response to all standard Veridian battery registers (`0x0B`) including voltage, current, temperature, design capacity, and cryptographic authentication queries.
-   - Microsecond-level on-the-fly Packet Error Code (PEC / CRC-8) calculation and verification.
-
-2. **Autonomous Auto-Learn Handshake Engine:**
-   - No manual model selection or complex menu configuration required.
-   - Upon target phone power-up, the firmware listens silently on the bus in `LISTEN` mode, captures the initial PMU query signature, identifies the matching profile (`COMPATIBLE`), and transitions automatically into `RUNNING` mode.
-
-3. **Dynamic State-of-Charge (SOC) Control:**
-   - Instantly adjust the emulated battery percentage between **1% and 100%** via the 3.5" color touchscreen or the PC serial console.
-   - Real-time updates reflect immediately in iOS Settings and the top status bar without restarting the phone.
-
-4. **100% Fail-Safe Hardware Isolation (1.8V Level Shifting):**
-   - Complete protection for the phone's Power Management IC (PMU) via a dual-channel `BSS138 N-MOSFET` bidirectional translator.
-   - High-speed, balanced pull-up network: **4.7kΩ** on the 1.8V phone side and **10kΩ** on the 3.3V MCU side (ultra-low 0.7mA bus loading, crisp square waveforms).
-   - Low-noise linear regulator `AMS1117-1.8V` equipped with a 22µF tantalum output capacitor and a 150Ω permanent minimum load resistor to prevent voltage drift under all conditions.
-
-5. **Integrated Power & Telemetry Monitoring:**
-   - Onboard `INA226` high-precision digital power monitor on a dedicated internal 3.3V I2C bus with a 5mΩ low-side shunt resistor.
-   - Continuous live telemetry measuring phone voltage, current draw (up to **5A continuous**), and power consumption.
+**CHIPLER Battery Emulator** sits between your DC bench power supply and the smartphone's battery FPC connector. Powered by the **Raspberry Pi RP2350B**, it emulates real-time battery handshake protocols (SWI, I2C, and BSI/NTC signals) so the motherboard recognizes a healthy, fully authenticated battery during testing and data recovery.
 
 ---
 
-## 📥 Official Downloads & Package Center
+## Key Features
 
-> 🚀 **Download the complete package exclusively at:**  
-> ### 🌐 [https://chipler.net/](https://chipler.net/)
-> Visit the official Chipler portal to download the ready-to-flash firmware (`.uf2`), high-resolution assembly guides, and complete wiring schematics.
-
----
-
-## 📖 Step-by-Step Field Assembly Guide (PDF)
-
-A comprehensive, beginner-friendly assembly manual has been prepared with full photographic evidence:
-* 🌐 **[Download Assembly Guides & Firmware via chipler.net](https://chipler.net/)**
-  - **Official product photographs** of every physical component.
-  - **Complete Bill of Materials (BOM)** with verified component ratings.
-  - **Detailed SOT-223 and SOT-23 pinout diagrams**.
-  - **Wire-by-wire color-coded breadboard interconnection table**.
-  - Safe phone battery flex termination guide (B+, GND, SDA, SCL).
+- **Deterministic Protocol Emulation:** Uses RP2350B PIO (Programmable I/O) state machines and dedicated hardware peripherals for cycle-accurate **SWI (Single-Wire Interface)**, **I2C/SMBus**, and **BSI** responses.
+- **Anti-Reboot Stability:** Emulates valid fuel-gauge registers (State of Charge, Voltage, Design Capacity, Cycle Count, and NTC Temperature) to prevent 3-minute diagnostic reboots.
+- **Modular Hardware Design:**
+  - **4-Layer Mainboard:** Houses the RP2350B MCU, level-shifting circuitry, ESD protection, and isolated power regulation.
+  - **2-Layer Auxiliary / Adapter Board:** Interchangeable FPC interface boards tailored for specific device families.
+- **Configurable Battery Profiles:** Easily switch between supported device profiles (`[e.g., iPhone X – 15 Pro Max / Custom Profiles]`).
+- **Bench-Safe Protection:** Integrated level translation (`1.8V` logic compatibility) and transient voltage suppression to protect sensitive CPU/PMIC data lines.
 
 ---
 
-## 🗂️ Repository Directory Structure
+## Hardware Architecture
+
+### Core Specifications
+
+| Component | Specification |
+| :--- | :--- |
+| **Microcontroller** | Raspberry Pi RP2350B (Dual-Core Arm Cortex-M33 / Hazard3 RISC-V + PIO) |
+| **Logic Level Interface** | `1.8V` bi-directional level-shifted data lines (PMIC safe) |
+| **Supported Protocols** | SWI / HDQ, I2C, BSI / NTC Analog Emulation |
+| **Input Supply (Bench PSU)** | `3.8V – 4.3V DC` (Recommended: `4.0V`, `3A–5A` current limit) |
+| **PCB Stackup** | 4-Layer Main Controller + 2-Layer FPC Adapter Interface |
+
+### Default Pinout (`[Update to match your schematic]`)
+
+| RP2350B Pin | Signal Name | Target Battery Line | Description |
+| :--- | :--- | :--- | :--- |
+| `GPIO [XX]` | `SWI_DATA` | `BAT_SWI / HDQ` | Single-wire battery communication data line |
+| `GPIO [XX]` | `I2C_SDA` | `BAT_SDA` | I2C Fuel Gauge Data (`1.8V` level-shifted) |
+| `GPIO [XX]` | `I2C_SCL` | `BAT_SCL` | I2C Fuel Gauge Clock (`1.8V` level-shifted) |
+| `GPIO [XX]` | `BSI_CTRL` | `BAT_BSI / NTC` | Battery Status / Thermal ID emulation |
+| `GPIO [XX]` | `STATUS_LED` | Onboard LED | Handshake & protocol activity indicator |
+
+---
+
+## Repository Structure
 
 ```text
 CHIPLER-Battery-Emulator/
-├── README.md                           # Main documentation (English)
-├── README_AR.md                        # Documentation in Arabic
-├── LICENSE                             # MIT Open Source License (Eng. Hamed Lasheen)
-├── .gitignore                          # Git build and cache exclusions
-├── docs/
-│   ├── CHIPLER_Assembly_Guide_EN.pdf   # Complete Assembly Guide (English Edition)
-│   └── CHIPLER_Assembly_AR.pdf         # Complete Assembly Guide (Arabic Edition)
-├── firmware/
-│   ├── source/                         # Clean canonical C source code (Pico SDK)
-│   │   ├── CMakeLists.txt              # Primary firmware build specification
-│   │   ├── pico_sdk_import.cmake       # Raspberry Pi Pico SDK importer
-│   │   ├── boards/                     # RP2350-USB-A custom board definition
-│   │   ├── config/                     # System parameters & safety boundaries
-│   │   ├── src/                        # Core source tree (auto, batt, hal, ui, gfx, settings)
-│   │   ├── bench/                      # Diagnostic pulse and translator benchmark suites
-│   │   └── tests/                      # 35 host unit test suites (100% CTest pass)
-│   └── releases/                       # Pre-compiled UF2 firmware ready to flash
-│       ├── CHIPLER_AUTO_LEARN_P1_RC1_fd0c96b.uf2      # Latest Auto-Learn build (Multi-Model Support)
-│       └── SHA256SUMS.txt                             # Cryptographic SHA256 checksum
+├── firmware/           # RP2350B C/C++ source code & PIO state machine programs
+│   ├── src/            # Protocol handlers (SWI, I2C, fuel-gauge register maps)
+│   ├── include/        # Header files and device battery profile definitions
+│   └── CMakeLists.txt  # Pico SDK / PlatformIO build configuration
+├── hardware/           # PCB schematics, layout files, BOM, and Gerber exports
+│   ├── mainboard-4L/   # 4-layer RP2350B controller PCB files
+│   └── aux-adapter-2L/ # 2-layer FPC connector adapter board files
+├── enclosure/          # 3D printable STL/STEP files for protective housing
+├── docs/               # Wiring diagrams, oscilloscope captures, and protocol notes
+└── README.md
 ```
 
 ---
 
-## ⚡ Quick Pinout Reference
+## Getting Started
 
-| Component | Pin | Connects To | Voltage | Function |
-|---|---|---|---|---|
-| **RP2350** | **3V3** | Breadboard 3.3V Rail | 3.3V | Powers LCD, INA226, and AMS1117 VIN |
-| **RP2350** | **GND** | System Ground Rail | 0V | Common ground for MCU, LCD, sensor, and phone |
-| **RP2350** | **GP0** | LCD Pin T_DO | 3.3V | Touch SPI MISO (Read coordinates) |
-| **RP2350** | **GP1** | LCD Pin CS | 3.3V | LCD Chip Select |
-| **RP2350** | **GP2** | LCD Pins SCK + T_CLK | 3.3V | Shared SPI Clock for Display & Touch |
-| **RP2350** | **GP3** | LCD Pins SDI + T_DIN | 3.3V | Shared SPI MOSI for Display & Touch |
-| **RP2350** | **GP4** | LCD Pin RESET | 3.3V | Hardware Reset for Display Controller |
-| **RP2350** | **GP5** | LCD Pin DC/RS | 3.3V | Display Data / Command Select |
-| **RP2350** | **GP6** | Q1 Drain (BSS138) | 3.3V | Battery SMBus SDA (MCU side + 10kΩ to 3.3V) |
-| **RP2350** | **GP7** | Q2 Drain (BSS138) | 3.3V | Battery SMBus SCL (MCU side + 10kΩ to 3.3V) |
-| **RP2350** | **GP8** | INA226 SDA | 3.3V | Dedicated internal I2C telemetry data |
-| **RP2350** | **GP9** | INA226 SCL | 3.3V | Dedicated internal I2C telemetry clock |
-| **RP2350** | **GP10** | INA226 ALERT | 3.3V | Overcurrent interrupt (internal pull-up enabled) |
-| **RP2350** | **GP26** | LCD Pin T_CS | 3.3V | Touchscreen Chip Select |
-| **RP2350** | **GP27** | LCD Pin T_IRQ | 3.3V | Touchscreen Pen Interrupt |
-| **AMS1117** | **VOUT (2)** | Breadboard 1.8V Rail | 1.8V | Powers Q1/Q2 gates and 4.7kΩ phone-side pull-ups |
-| **Q1 Source** | **Pin 2** | iPhone Battery SDA | 1.8V | Battery SMBus data to phone (+ 4.7kΩ to 1.8V) |
-| **Q2 Source** | **Pin 2** | iPhone Battery SCL | 1.8V | Battery SMBus clock to phone (+ 4.7kΩ to 1.8V) |
+### Prerequisites
 
----
+- **Raspberry Pi Pico SDK** (`v2.0.0` or newer with RP2350 support) or **PlatformIO**
+- **ARM GCC Toolchain** (`arm-none-eabi-gcc`) & **CMake** (`>= 3.13`)
+- USB-C data cable for flashing the RP2350B
 
-## 🚀 How to Flash & Run
+### Building & Flashing the Firmware
 
-1. **Enter BOOTSEL Mode:**
-   - Hold down the `BOOTSEL` button on the RP2350 development board.
-   - Plug the USB cable into your computer, then release the button.
-   - A removable mass storage drive named `RPI-RP2` will appear.
+1. **Clone the repository:**
+   ```bash
+   git clone [https://github.com/Hamedlasheen/CHIPLER-Battery-Emulator.git](https://github.com/Hamedlasheen/CHIPLER-Battery-Emulator.git)
+   cd CHIPLER-Battery-Emulator/firmware
+   ```
 
-2. **Deploy the Firmware:**
-   - Drag and drop the approved UF2 binary:
-     [`firmware/releases/CHIPLER_AUTO_LEARN_P1_RC1_fd0c96b.uf2`](firmware/releases/CHIPLER_AUTO_LEARN_P1_RC1_fd0c96b.uf2)
-   - The board will automatically reboot, and the LCD will immediately illuminate displaying the live telemetry interface in `LISTEN` mode.
+2. **Configure and compile:**
+   ```bash
+   mkdir build && cd build
+   cmake -DPICO_BOARD=pico2 ..
+   make -j4
+   ```
 
-3. **Power & Boot the Target Phone:**
-   - Set an external regulated DC bench power supply to **4.0V** with a **2.5A** current limit.
-   - Connect the power supply through the INA226 shunt to the phone battery flex (B+ and GND).
-   - Connect the 1.8V level-shifted SDA and SCL lines to the phone battery flex.
-   - Press the iPhone power button. The emulator will automatically detect the bus transactions, transition to `RUNNING` mode, and display the battery percentage on the iPhone screen.
+3. **Flash to the board:**
+   - Hold the **BOOTSEL** button on the CHIPLER mainboard while connecting it via USB-C to your computer.
+   - Drag and drop the generated `chipler_battery_emulator.uf2` file onto the `RP2350` mass storage drive.
 
 ---
 
-## 🧪 Verification & Test Suite
+## Bench Usage & Safety Notice
 
-The codebase has undergone rigorous engineering testing and passed with **100% compliance**:
-- **35/35 Host Unit Test Suites (CTest):** 100% PASS in 1.19 seconds.
-- **225 Auto-Learn Assertions:** Full verification of the handshake engine, fail-closed flash persistence, and profile matching.
-- **7,886 UI Test Cycles:** Complete regression test verifying automatic mode transitions without manual picker intervention.
-- **Physical Hardware Verification:** Live boot verified on multiple target smartphone models, with real-time SOC adjustment (50% to 100%) confirmed on the device display.
+> **WARNING:** Always verify your DC bench power supply voltage before connecting a smartphone logic board. Exceeding **4.4V** on `VBAT+` can permanently damage the PMIC and charging ICs.
 
----
-
-## 📜 License
-
-This project is licensed under the open-source **[MIT License](LICENSE)**. You are free to use, modify, and distribute this software with attribution to the author:  
-**Eng. Hamed Lasheen — CHIPLER Platform (chipler.net)**.
+1. Set your DC bench power supply to **`4.0V`** with a current limit of **`3.0A`** (or **`1.0A`** during initial short-circuit checks).
+2. Connect the bench power supply leads (`+` and `-`) to the emulator's power input terminals.
+3. Attach the matching FPC battery flex cable to the target smartphone motherboard.
+4. Power on the bench supply and trigger the device's power button; the status LED will indicate active battery handshake communication.
 
 ---
 
-## 📬 Contact & Inquiries
+## Roadmap
 
-* 🌐 **Website:** [chipler.net](https://chipler.net/)
-* 📘 **Facebook:** [facebook.com/Chipler.eg](https://www.facebook.com/Chipler.eg)
-* 💼 For technical inquiries, collaboration, or hardware diagnostic tools development, please reach out through the official links above.
+- [x] Core RP2350B hardware architecture & 4-layer PCB layout
+- [x] SWI & I2C fuel-gauge handshake emulation
+- [ ] On-the-fly profile switching via physical button / OLED display
+- [ ] Expanded multi-brand Android I2C fuel-gauge register profiles
+- [ ] Real-time current & telemetry logging over USB CDC serial
+
+---
+
+## License
+
+This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
+
+---
+
+**Developed by [Hamed Lasheen](https://github.com/Hamedlasheen) — Chipler Hardware & Embedded Diagnostics**
